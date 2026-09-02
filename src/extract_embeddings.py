@@ -276,8 +276,10 @@ High Level Map: what does the script actually do?
 import torch
 from transformers import AutoTokenizer, AutoModel
 
-# Import your Phase 2 prompt formatting function!
-from format_data import format_m6_prompt
+try:
+    from src.format_data import format_m6_prompt
+except ImportError:
+    from format_data import format_m6_prompt
 
 def main():
     # ----------------------------------------------------

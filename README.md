@@ -16,11 +16,17 @@ Instead, this project frames user behavior modeling as language modeling. It tra
 ```text
 m6rec-pytorch/
 ├── src/
-│   └── loss.py                  # InfoNCE contrastive loss implementation
+│   ├── __init__.py
+│   ├── format_data.py           # Prompt construction and Hugging Face tokenization
+│   ├── extract_embeddings.py    # Forward passes and [CLS] vector extraction
+│   ├── loss.py                  # InfoNCE contrastive loss implementation
+│   ├── model.py                 # Two-Tower M6-Rec model architecture
+│   ├── test_hf.py               # Hugging Face environment validation
+│   └── train.py                 # Training pipeline & checkpoint saver
 ├── docs/
-│   └── phase4_infonce_loss.md   # Mathematical specification and documentation
-├── format_data.py               # Prompt construction and Hugging Face tokenization
-├── extract_embeddings.py        # Forward passes and [CLS] vector extraction
+│   ├── phase4_infonce_loss.md       # InfoNCE mathematical specification
+│   └── phase5_training_pipeline.md  # Training loop & backpropagation guide
+├── experiments/                 # Saved model weights & checkpoints
 ├── requirements.txt             # Project dependencies
 └── .gitignore                   # Standard Python/PyTorch gitignore
 ```
@@ -29,7 +35,7 @@ m6rec-pytorch/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/m6rec-pytorch.git
+   git clone https://github.com/kkdoestech/m6rec-pytorch.git
    cd m6rec-pytorch
    ```
 
@@ -48,7 +54,7 @@ m6rec-pytorch/
 
 ### 1. Formatting and Tokenizing Data
 ```python
-from format_data import format_m6_prompt
+from src.format_data import format_m6_prompt
 
 prompt = format_m6_prompt(
     user_history=["clicked blue Nike running shoes", "viewed adidas sports bottle"],
@@ -61,11 +67,17 @@ print(prompt)
 ### 2. Extracting Embeddings
 Run the extraction script to pass a batch of text through the Transformer and retrieve the 2D `[CLS]` embeddings:
 ```bash
-python extract_embeddings.py
+python src/extract_embeddings.py
 ```
 
 ### 3. Calculating InfoNCE Loss
 You can test the custom loss function directly to see how `[Batch, Hidden]` vectors are processed into a `[Batch, Batch]` similarity matrix:
 ```bash
 python src/loss.py
+```
+
+### 4. Training the Two-Tower Model
+Run the complete training pipeline to train the model and save a checkpoint:
+```bash
+python src/train.py
 ```
